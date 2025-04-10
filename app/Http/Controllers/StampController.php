@@ -24,6 +24,16 @@ class StampController extends Controller
         return response()->json($query->orderBy('stamped_at', 'desc')->get());
     }
 
+    public function monthly(Request $request)
+    {
+        $query = Stamp::where('user_id', 1)
+            ->whereMonth('stamped_at', now()->month)
+            ->whereYear('stamped_at', now()->year)
+            ->orderBy('stamped_at', 'desc');
+
+        return response()->json($query->get());
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
