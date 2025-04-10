@@ -13,11 +13,15 @@ class StampController extends Controller
 
         if ($request->has('date')) {
             $query->whereDate('stamped_at', $request->date);
+        } else {
+            $query->whereDate('stamped_at', now());
         }
 
-        $stamp = $query->orderBy('stamped_at', 'desc')->first();
+        if ($request->has('latest') && $request->boolean('latest')) {
+            return response()->json($query->orderBy('stamped_at', 'desc')->first());
+        }
 
-        return response()->json($stamp);
+        return response()->json($query->orderBy('stamped_at', 'desc')->get());
     }
 
     public function store(Request $request)
